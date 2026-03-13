@@ -36,6 +36,7 @@ void draw() {
 
 bool check_random(float probability) {
     random_number_index++;
+    if (random_number_index >= random_numbers_number) random_number_index = 0;
     return (random_numbers[random_number_index] > probability);
 }
 
@@ -43,8 +44,8 @@ void process() {
     for (int i = 0; i <= generation; i++) { // Run diagonally accross x+y = generation. O(n^2) but again; quick and dirty.
         if (generation-i >= screen_height || i >= screen_width) continue; // i.e. don't try and do stuff off the screen.
         if (board[i][generation-i]) {
-            board[i][generation-i+1] = check_random(0.275);
-            board[i+1][generation-i] = check_random(0.275);
+            board[i][generation-i+1] = check_random(0.3);
+            board[i+1][generation-i] = check_random(0.3);
         }
     }
     if (generation > screen_width+screen_height)paused = true; // Should probably lock it rather than just pausing.
