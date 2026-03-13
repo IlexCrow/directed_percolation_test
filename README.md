@@ -1,5 +1,7 @@
 Super simple directed percolation program written in C++ because directed percolation was mentioned in a talk on turbulence, and I became somewhat obsessed.
 
+Requires SDL2.
+
 A few examples of the results with varying probabilities of propagation below:
 
 ![](https://github.com/IlexCrow/directed_percolation_test/blob/main/samples/0f7dc608-aa3b-430d-b278-9d33c13b94cc.jpeg)
