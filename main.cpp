@@ -2,10 +2,9 @@
 #include <random>
 #include <unistd.h>
 #include <SDL2/SDL.h>
-#include <array>
 #define scale 36
-const int screen_width = 500;
-const int screen_height = 500;
+const int screen_width = 1000;
+const int screen_height = 1000;
 bool running = true;
 bool paused = false;
 int generation = 0;
@@ -13,6 +12,9 @@ SDL_Window *window = nullptr;
 SDL_Renderer *renderer = nullptr;
 bool board[screen_width][screen_height]; // God it has been quite a while since I've done any programming hasn't it.
 
+const int random_numbers_number = 10000000;
+float random_numbers[random_numbers_number]; // Psudo random numbers so it's not super slow
+int random_number_index = 0;
 
 void draw() {
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
@@ -32,14 +34,17 @@ void draw() {
     SDL_RenderPresent(renderer);
 }
 
-
+bool check_random(float probability) {
+    random_number_index++;
+    return (random_numbers[random_number_index] > probability);
+}
 
 void process() {
     for (int i = 0; i <= generation; i++) { // Run diagonally accross x+y = generation. O(n^2) but again; quick and dirty.
         if (generation-i >= screen_height || i >= screen_width) continue; // i.e. don't try and do stuff off the screen.
         if (board[i][generation-i]) {
-            board[i][generation-i+1] = true;
-            board[i+1][generation-i] = true;
+            board[i][generation-i+1] = check_random(0.275);
+            board[i+1][generation-i] = check_random(0.275);
         }
     }
     if (generation > screen_width+screen_height)paused = true; // Should probably lock it rather than just pausing.
@@ -47,6 +52,12 @@ void process() {
 }
 
 int main() {
+
+    for (int i = 0; i < random_numbers_number; i++) { // Generate array of psudo random numbers.
+        // random_numbers[i] = 1;
+        random_numbers[i] = static_cast <float> (rand()) / static_cast <float> (RAND_MAX); // I will make this more random later.
+    }
+
     SDL_Init(SDL_INIT_VIDEO);
     SDL_CreateWindowAndRenderer(screen_width, screen_height, 0, &window, &renderer);
     // SDL_RenderSetScale(renderer, 0.5, 0.5);
